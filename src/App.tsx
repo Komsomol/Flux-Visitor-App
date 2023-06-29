@@ -1,12 +1,20 @@
-import React from 'react';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import './assets/css/App.css';
 
 const FormComponent = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit, formState: { errors } } = useForm<FormData>();
   
-  const onSubmit = async (data) => {
+  interface FormData {
+    firstName: string;
+    surname: string;
+    company: string;
+    email: string;
+    visiting: string;
+  }
+  
+  
+  const onSubmit = async (data:FormData) => {
     try {
       const response = await axios.post('http://localhost:3000/submit', data);
       if (response.status === 200) {
