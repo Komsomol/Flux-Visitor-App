@@ -15,6 +15,15 @@ app.use(express.json());
 
 app.use(express.static('public'));
 
+app.use(session({
+  secret: 'your-session-secret',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false } // For development, set secure to true in production
+}));
+
+app.use(flash());
+
 app.set('view engine', 'pug');
 
 var conn = new jsforce.Connection({
@@ -30,7 +39,7 @@ conn.login(process.env.USERNAME, process.env.PASSWORD, function(err, userInfo) {
 });
 
 app.get('/', function (req, res) {
-  res.render('index');
+  res.render('index', { messages: req.flash() });
 });
 
 app.post('/submit', function (req, res) {
@@ -48,7 +57,6 @@ app.post('/submit', function (req, res) {
     Title: title,
     FirstName: name,
     LastName: surname, 
-    Phone: phone,
     Email: email,
     company__c: company
   };
@@ -57,13 +65,16 @@ app.post('/submit', function (req, res) {
   console.log(contact);
 
   conn.sobject("Contact").create(contact, function(err, ret) {
-    if (err || !ret.success) {
-       return console.error(err, ret);
-      }
-    console.log("Created record id : " + ret.id);
-  });
+    if (err || !ret.success) { 
+      console.error(err, ret);
+      req.flash('error', 'Error in creating contact.'); // set an error message
+      return res.redirect('/');
+    }
 
-  res.redirect('/');
+    console.log("Created record id : " + ret.id);
+    req.flash('success', 'Contact created successfully.'); // set a success message
+    res.redirect('/');
+  });
 });
 
 app.listen(3000, function () {

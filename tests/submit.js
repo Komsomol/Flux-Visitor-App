@@ -4,7 +4,6 @@ const data = {
   Title : "Mr",
   FirstName : "Test24J",
   LastName : "Test24J",
-  Phone : "1234567890",
   Email : "test@email.com",
   company__c : "ECA"
 };

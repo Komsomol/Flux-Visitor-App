@@ -4,9 +4,17 @@ html
     title Test Application
     link(rel="stylesheet", href="/styles.css")
   body
-    form(action="/submit" method="POST")
-      input(type="text" name="name" placeholder="Name")
-      input(type="text" name="email" placeholder="Email")
-      input(type="text" name="company" placeholder="Company")
-      button(type="submit") Submit
-    script(src="/app.js")
+    if messages.error
+      .message.error #{messages.error}
+
+    if messages.success
+      .message.success #{messages.success}
+    else
+      form(action="/submit" method="POST")
+        input(type="text" name="FirstName" placeholder="First Name")
+        input(type="text" name="LastName" placeholder="Last Name")
+        input(type="text" name="Email" placeholder="Email")
+        input(type="text" name="company__c" placeholder="Company")
+        button(type="submit") Submit
+
+    script(src="/main.js" type="text/javascript")
