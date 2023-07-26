@@ -42,9 +42,9 @@ var conn = new jsforce.Connection({
 
 conn.login(
   //process.env.USERNAME,
-  steve.blyth@engageworks.com,
+  "steve.blyth@engageworks.com",
   // process.env.PASSWORD,
-  Tiggyblyth10zYwfR4HzMaqqnybMFQdDXbVt,
+  "Tiggyblyth10zYwfR4HzMaqqnybMFQdDXbVt",
   function (err, userInfo) {
     if (err) {
       return console.error(err);
