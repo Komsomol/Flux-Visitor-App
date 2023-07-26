@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project.",
   "main": "app.js",
+  "type": "module",
   "scripts": {
     "test": "node ./tests/submit.js",
     "start": "nodemon app.js",

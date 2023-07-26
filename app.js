@@ -1,13 +1,14 @@
-const express = require('express');
+import express from 'express';
+import bodyParser from 'body-parser';
+import jsforce from 'jsforce';
+import session from 'express-session';
+import flash from 'connect-flash';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
 const app = express();
-const bodyParser = require('body-parser');
-const jsforce = require('jsforce');
 
-const session = require('express-session');
-const flash = require('connect-flash');
-
-require('dotenv').config()
- 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 // Add this line to set up the body-parser middleware.
@@ -30,6 +31,7 @@ var conn = new jsforce.Connection({
   loginUrl : 'https://login.salesforce.com'
 });
 
+// eslint-disable-next-line no-undef 
 conn.login(process.env.USERNAME, process.env.PASSWORD, function(err, userInfo) {
   if (err) { return console.error(err); }
   console.log(conn.accessToken);
@@ -48,7 +50,6 @@ app.post('/submit', function (req, res) {
   let title = req.body.Title;
   let name = req.body.FirstName;
   let surname = req.body.LastName;
-  let phone = req.body.Phone;
   let email = req.body.Email;
   let company = req.body.company__c;
 

@@ -1,0 +1,128 @@
+@font-face {
+  font-family: "Maison Neue";
+  src: url("../fonts/MaisonNeue-Bold.woff") format("woff");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Maison Neue";
+  src: url("../fonts/MaisonNeue-Book.woff") format("woff");
+  font-weight: 500; /* Book is usually semi-bold or medium, which is commonly denoted as 500. Adjust this if needed. */
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Maison Neue";
+  src: url("../fonts/MaisonNeue-Light.woff") format("woff");
+  font-weight: 300; /* Light is commonly denoted as 300 */
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Reset some HTML elements to avoid browser inconsistencies */
+body,
+h1,
+p,
+label,
+input,
+select,
+button {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Set the font for the entire body. Using the Maison Neue font */
+body {
+  font-family: "Maison Neue", sans-serif;
+  font-size: 16px; /* increased base font size for better mobile readability */
+  background-color: #222; /* dark background */
+  color: #fff; /* white text */
+  line-height: 1.6;
+}
+
+/* High DPI displays settings */
+@media only screen and (-webkit-min-device-pixel-ratio: 1.5),
+  only screen and (min--moz-device-pixel-ratio: 1.5),
+  only screen and (-o-min-device-pixel-ratio: 3/2),
+  only screen and (min-device-pixel-ratio: 1.5) {
+  /* Add your high DPI rules here. Usually it's background or icon images that need to be updated */
+}
+
+/* Flex layout for the form with direction column so it stacks vertically */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Add space between form elements */
+  padding: 20px;
+  max-width: 600px; /* Maximum form width */
+  margin: 0 auto; /* Center the form */
+}
+
+/* Style for form elements */
+input,
+select,
+button {
+  padding: 10px;
+  font-size: 1em; /* will equal 16px as set in body */
+  border: none;
+}
+
+/* Style for labels */
+label {
+  margin-bottom: 2px;
+  font-weight: 500; /* using the Book weight for labels */
+}
+
+/* Style for error messages */
+#messages {
+  text-align: center;
+}
+
+/* Style for button */
+button {
+  background-color: #0ddfbc; /* your custom color */
+  color: #fff; /* white text */
+  border: none;
+  cursor: pointer;
+  font-weight: bold; /* using the Bold weight for button text */
+}
+
+/* Style for button on hover */
+button:hover {
+  background-color: #09b89b; /* darker variant of the custom color */
+}
+
+/* Style for the page title */
+h1 {
+  text-align: center;
+  padding: 20px 0;
+  font-weight: bold; /* using the Bold weight for the title */
+  font-size: 2em; /* title is twice the base font size */
+}
+
+/* Adjustments for larger screens */
+@media (min-width: 768px) {
+  body {
+    font-size: 18px; /* slightly larger font for bigger screens */
+  }
+
+  form {
+    gap: 30px; /* More space between form elements */
+    padding: 30px;
+  }
+
+  /* Larger font sizes for desktop */
+  input,
+  select,
+  button {
+    font-size: 1.1em;
+  }
+
+  h1 {
+    font-size: 2.2em;
+  }
+}

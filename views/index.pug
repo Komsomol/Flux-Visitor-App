@@ -1,20 +1,40 @@
 doctype html
-html
+html(lang="en")
   head
-    title Test Application
-    link(rel="stylesheet", href="/styles.css")
-  body
-    if messages.error
-      .message.error #{messages.error}
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    meta(name="HandheldFriendly", content="True")
+    meta(name="MobileOptimized", content="320")
+    title Flux Visitor App
+    link(rel="stylesheet", href="/css/styles.css")
+    link(rel="icon", href="/images/favicon.png")
+    script(src="/js/main.js")
+  body 
+    h1= title
+    div#messages
+      p= message
 
-    if messages.success
-      .message.success #{messages.success}
-    else
+    if showForm
       form(action="/submit" method="POST")
-        input(type="text" name="FirstName" placeholder="First Name")
-        input(type="text" name="LastName" placeholder="Last Name")
-        input(type="text" name="Email" placeholder="Email")
-        input(type="text" name="company__c" placeholder="Company")
-        button(type="submit") Submit
+        label(for="firstName") First Name
+        input#firstName(type="text" name="FirstName" required pattern="^[A-Za-z]{1,35}$")
 
-    script(src="/main.js" type="text/javascript")
+        label(for="lastName") Last Name
+        input#lastName(type="text" name="LastName" required pattern="^[A-Za-z]{1,35}$")
+
+        label(for="email") Email
+        input#email(type="email" name="Email" required)
+
+        label(for="company") Email
+        input#email(type="company" name="company__c" required)
+
+        label(for="Here to see") Company
+        select#company(name="Source__c" required)
+          option(value="") -- Please who you are here to see --
+          option(value="Facebook") Facebook
+          option(value="Apple") Apple
+          option(value="Amazon") Amazon
+          option(value="Netflix") Netflix
+          option(value="Google") Google
+
+        button(type="submit") Submit
