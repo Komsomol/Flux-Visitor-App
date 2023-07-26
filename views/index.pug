@@ -16,6 +16,7 @@ html(lang="en")
 
     if showForm
       form(action="/submit" method="POST")
+        
         label(for="firstName") First Name
         input#firstName(type="text" name="FirstName" required pattern="^[A-Za-z]{1,35}$")
 
@@ -25,16 +26,14 @@ html(lang="en")
         label(for="email") Email
         input#email(type="email" name="Email" required)
 
-        label(for="company") Email
+        label(for="company") Company
         input#email(type="company" name="company__c" required)
 
-        label(for="Here to see") Company
+        label(for="Here to see") Seeing
         select#company(name="Source__c" required)
           option(value="") -- Please who you are here to see --
-          option(value="Facebook") Facebook
-          option(value="Apple") Apple
-          option(value="Amazon") Amazon
-          option(value="Netflix") Netflix
-          option(value="Google") Google
+          option(value="MCR") MCR
+          option(value="Richard") Richard
+          option(value="Steve") Steve
 
         button(type="submit") Submit

@@ -1,39 +1,42 @@
 {
   "name": "flux_visitor_app",
   "version": "1.0.0",
-  "description": "TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project.",
-  "main": "app.js",
+  "description": "CRM capture to salesforce",
   "type": "module",
+  "main": "app.js",
   "scripts": {
-    "test": "node ./tests/submit.js",
-    "start": "nodemon app.js",
-    "lint": "eslint .",
-    "format": "prettier --write ."
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint .  --fix",
+    "format": "prettier --write .",
+    "dev": "nodemon app.js | browser-sync start --proxy 'localhost:3000' --files 'public,views'",
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",
-    "url": "https://EngageWorksDev@dev.azure.com/EngageWorksDev/Flux%20Visitor%20App/_git/Flux_Visitor_App"
+    "url": "git+https://github.com/Komsomol/AlyaAI.git"
   },
-  "author": "Farhad Agzamov",
+  "author": "farhad agzamov",
   "license": "ISC",
-  "dependencies": {
-    "body-parser": "^1.20.2",
-    "connect-flash": "^0.1.1",
-    "express": "^4.18.2",
-    "express-session": "^1.17.3",
-    "jsforce": "^1.11.1",
-    "pug": "^3.0.2",
-    "request": "^2.88.2"
+  "bugs": {
+    "url": "https://github.com/Komsomol/AlyaAI/issues"
   },
+  "homepage": "https://github.com/Komsomol/AlyaAI#readme",
   "devDependencies": {
-    "axios": "^1.4.0",
-    "dotenv": "^16.3.1",
+    "browser-sync": "^2.27.7",
     "eslint": "^8.45.0",
-    "eslint-config-node": "^4.1.0",
     "eslint-config-prettier": "^8.8.0",
-    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-prettier": "^5.0.0",
     "nodemon": "^3.0.1",
     "prettier": "^3.0.0"
+  },
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "jsforce": "^1.11.1",
+    "openai": "^3.3.0",
+    "pug": "^3.0.2"
   }
 }
