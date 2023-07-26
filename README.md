@@ -1,5 +1,12 @@
-# AlyaAI
+# Flux Visitor App
 
-docker build -t flux-app .
+# PM2 
+Using PM2 to start the app on server startup
+- `pm2 start app.js`
+- `pm2 startup`
+- `pm2 save`
 
-docker run -p 3000:3000 -d flux-app
+# Port control
+Find the process using port 3000:
+- `lsof -i :3000`
+- `kill <PID>`
