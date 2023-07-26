@@ -36,15 +36,9 @@ var conn = new jsforce.Connection({
   loginUrl: "https://login.salesforce.com",
 });
 
-// USERNAME=steve.blyth@engageworks.com
-// PASSWORD=Tiggyblyth10zYwfR4HzMaqqnybMFQdDXbVt
-
-
 conn.login(
-  //process.env.USERNAME,
-  "steve.blyth@engageworks.com",
-  // process.env.PASSWORD,
-  "Tiggyblyth10zYwfR4HzMaqqnybMFQdDXbVt",
+  process.env.SALES_FORCE_USERNAME,
+  process.env.SALES_FORCE_PASSWORD,
   function (err, userInfo) {
     if (err) {
       return console.error(err);
