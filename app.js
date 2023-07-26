@@ -62,12 +62,6 @@ app.set("view engine", "pug");
 // Define routes
 app.use("/", indexRouter);
 
-// Handle errors
-app.use((err, req, res) => {
-  console.error(err.stack);
-  res.status(500).send("Something broke!");
-});
-
 // Pass jsforce connection to middleware
 app.post("/submit", (req, res) => {
   console.log(req.body);
@@ -97,7 +91,7 @@ app.post("/submit", (req, res) => {
         showForm: false,
       });
     } else {
-      console.log("Saved submission:", req.body);
+      console.log("Saved submission:==========>", req.body);
       res.render("index", {
         message: "Thank you for submitting.",
         showForm: false,

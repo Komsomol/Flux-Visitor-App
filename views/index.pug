@@ -18,10 +18,10 @@ html(lang="en")
       form(action="/submit" method="POST")
         
         label(for="firstName") First Name
-        input#firstName(type="text" name="FirstName" required pattern="^[A-Za-z]{1,35}$")
+        input#firstName(type="text" name="FirstName" required)
 
         label(for="lastName") Last Name
-        input#lastName(type="text" name="LastName" required pattern="^[A-Za-z]{1,35}$")
+        input#lastName(type="text" name="LastName" required)
 
         label(for="email") Email
         input#email(type="email" name="Email" required)
