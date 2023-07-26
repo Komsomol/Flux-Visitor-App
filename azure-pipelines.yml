@@ -17,8 +17,8 @@ steps:
 
 - script: |
     npm install
-    npm run build
-  displayName: 'npm install and build'
+    npm run start
+  displayName: 'npm install and run start'
 
 
 # - task: ArchiveFiles@2
@@ -38,5 +38,5 @@ steps:
 
 - task: AzureStaticWebApp@0
   inputs:
-    app_location: '/dist/'
+    app_location: '/public/'
     azure_static_web_apps_api_token: 'ecf5c89a04836c78f7dacb3a67cd9ce6af4ac4c270a7dd0522d0196413b3724b3-7975c35d-a0df-4230-acab-a987a7abea83003250307'
