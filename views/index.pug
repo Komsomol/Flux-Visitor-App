@@ -13,7 +13,9 @@ html(lang="en")
     h1= title
     div#messages
       p= message
-
+      p= wifi_msg
+      p= wifi_ssid
+      p= wifi_password
     if showForm
       form(action="/submit" method="POST")
         

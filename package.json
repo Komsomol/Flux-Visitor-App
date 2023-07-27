@@ -8,7 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint .  --fix",
     "format": "prettier --write .",
-    "dev": "nodemon app.js | browser-sync start --proxy 'localhost:3000' --files 'public,views'",
+    "dev": "node app.js | browser-sync start --proxy 'localhost:3000' --files 'public,views'",
     "start": "node app.js"
   },
   "repository": {

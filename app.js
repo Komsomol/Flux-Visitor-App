@@ -28,7 +28,7 @@ app.use(
     secret: "your-session-secret",
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false }, // For development, set secure to true in production
+    cookie: { secure: true }, // For development, set secure to true in production
   }),
 );
 
@@ -88,6 +88,9 @@ app.post("/submit", (req, res) => {
       console.log("Saved submission:==========>", req.body);
       res.render("index", {
         message: "Thank you for submitting.",
+        wifi_msg:`Please connect to our WIFI:`,
+        wifi_ssid:`SSID: Flux Guest`,
+        wifi_password:`Password: Welcome123`,
         showForm: false,
       });
 
