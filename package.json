@@ -8,7 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint .  --fix",
     "format": "prettier --write .",
-    "dev": "node app.js | browser-sync start --proxy 'localhost:3000' --files 'public,views'",
+    "dev": "concurrently --kill-others \"node app.js\" \"browser-sync start --proxy 'localhost:3000' --files 'public,views'\"",
     "start": "node app.js"
   },
   "repository": {
@@ -22,7 +22,8 @@
   },
   "homepage": "https://github.com/Komsomol/AlyaAI#readme",
   "devDependencies": {
-    "browser-sync": "^2.27.7",
+    "browser-sync": "^2.29.3",
+    "concurrently": "^8.2.0",
     "eslint": "^8.45.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-import": "^2.27.5",
