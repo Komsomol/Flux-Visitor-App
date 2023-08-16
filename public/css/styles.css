@@ -71,6 +71,11 @@ button {
   border: none;
 }
 
+input[type="checkbox"] {
+  display: inline-block;
+  width: auto;
+}
+
 /* Style for labels */
 label {
   margin-bottom: 2px;

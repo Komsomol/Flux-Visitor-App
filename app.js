@@ -6,6 +6,7 @@ import { dirname } from "path";
 import session from "express-session";
 import jsforce from "jsforce";
 import dotenv from "dotenv";
+import ip from "ip";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -65,6 +66,9 @@ app.post("/submit", (req, res) => {
   let email = req.body.Email;
   let company = req.body.company__c;
   let source = req.body.Source__c;
+  let visitedState = req.body.Previously_Visited_Flux__c;
+
+  let isVisited = (visitedState === "on") ? true : false;
 
   var contact = {
     FirstName: name,
@@ -72,6 +76,7 @@ app.post("/submit", (req, res) => {
     Email: email,
     company__c: company,
     Source__c: source,
+    Previously_Visited_Flux__c: isVisited
   };
 
   console.log("---------------- contact ----------------");
@@ -105,6 +110,11 @@ app.post("/submit", (req, res) => {
 
 const port = process.env.PORT || 3000;
 
-app.listen(port, function () {
-  console.log(`Server is running on port ${port}`);
+app.listen(port, () => {
+  const localURL = `http://localhost:${port}`;
+  const networkURL = `http://${ip.address()}:${port}`;
+
+  console.log(`Server is running on:
+  - Local:   ${localURL}
+  - Network: ${networkURL}`);
 });
