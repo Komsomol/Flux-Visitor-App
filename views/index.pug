@@ -9,71 +9,74 @@ html(lang="en")
     link(rel="stylesheet", href="/css/styles.css")
     link(rel="icon", href="/images/favicon.png")
     script(src="/js/main.js")
-  body 
-    h1= title
-    div#messages
-      p= message
-      p= wifi_msg
-      p= wifi_ssid
-      p= wifi_password
-    if showForm
-      form(action="/submit" method="POST")
-        
-        label(for="firstName") First Name
-        input#firstName(type="text" name="FirstName" required)
+  body
+    .container 
+      h1= title
+      .holder 
+        div#messages
+          p= message
+          p= wifi_msg
+          p= wifi_ssid
+          p= wifi_password
+      if showForm
+        .formholder
+          form(action="/submit" method="POST")
+            
+            label(for="firstName") First Name
+            input#firstName(type="text" name="FirstName" required)
 
-        label(for="lastName") Last Name
-        input#lastName(type="text" name="LastName" required)
+            label(for="lastName") Last Name
+            input#lastName(type="text" name="LastName" required)
 
-        label(for="email") Email
-        input#email(type="email" name="Email" required)
+            label(for="email") Email
+            input#email(type="email" name="Email" required)
 
-        label(for="company") Company
-        input#email(type="company" name="company__c" required)
+            label(for="company") Company
+            input#email(type="company" name="company__c" required)
 
-        label(for="Here to see") Seeing
-        select#company(name="Source__c" required)
-          option(value="") -- Who are you here to see --
-          option(value="Property Event") Property Event
-          option(value="Engage Works") Engage Works
-          option(value="EW - Alexander McCuaig") EW - Alexander McCuaig
-          option(value="EW - Fiona Humphreys") EW - Fiona Humphreys
-          option(value="EW - Richard Ward") EW - Richard Ward
-          option(value="EW - Steve Blyth") EW - Steve Blyth
-          option(value="EW - Other") EW - Other
+            label(for="Here to see") Seeing
+            select#company(name="Source__c" required)
+              option(value="") -- Who are you here to see --
+              option(value="Property Event") Property Event
+              option(value="Engage Works") Engage Works
+              option(value="EW - Alexander McCuaig") EW - Alexander McCuaig
+              option(value="EW - Fiona Humphreys") EW - Fiona Humphreys
+              option(value="EW - Richard Ward") EW - Richard Ward
+              option(value="EW - Steve Blyth") EW - Steve Blyth
+              option(value="EW - Other") EW - Other
 
-          option(value="7th Sense") 7th Sense
-          option(value="AVER") AVER
-          option(value="Bosk") Bosk
-          option(value="CJP") CJP
-          option(value="Forever Foundry") Forever Foundry
+              option(value="7th Sense") 7th Sense
+              option(value="AVER") AVER
+              option(value="Bosk") Bosk
+              option(value="CJP") CJP
+              option(value="Forever Foundry") Forever Foundry
 
-          //- option(value="Geenee") Geenee
-          option(value="Holotronics") Holotronics
-          option(value="InfiLED") InfiLED
-          option(value="Interactive Scape") Interactive Scape
-          option(value="Kampus") Kampus
-          //- option(value="Kimatica") Kimatica
-          option(value="Magik Door") Magik Door
-          option(value="Media Powerhouse") Media Powerhouse
-          option(value="Mersive") Mersive
-          option(value="Mo-Sys") Mo-Sys
-          option(value="NETGEAR") NETGEAR
-          option(value="NSYNK") NSYNK
-          //- option(value="Neutral Digital") Neutral Digital
-          option(value="Novalia") Novalia
-          option(value="Philips") Philips
-          option(value="Quividi Bluesight Systems") Quividi Bluesight Systems
-          option(value="Snapmatic") Snapmatic
-          option(value="Ultra Leap") Ultra Leap
-          option(value="Visualise") Visualise
-          option(value="Volta") Volta
-          option(value="Vive HTC") Vive HTC
-          option(value="ZeeVee") ZeeVee
-          option(value="eyeora") eyeora
+              //- option(value="Geenee") Geenee
+              option(value="Holotronics") Holotronics
+              option(value="InfiLED") InfiLED
+              option(value="Interactive Scape") Interactive Scape
+              option(value="Kampus") Kampus
+              //- option(value="Kimatica") Kimatica
+              option(value="Magik Door") Magik Door
+              option(value="Media Powerhouse") Media Powerhouse
+              option(value="Mersive") Mersive
+              option(value="Mo-Sys") Mo-Sys
+              option(value="NETGEAR") NETGEAR
+              option(value="NSYNK") NSYNK
+              //- option(value="Neutral Digital") Neutral Digital
+              option(value="Novalia") Novalia
+              option(value="Philips") Philips
+              option(value="Quividi Bluesight Systems") Quividi Bluesight Systems
+              option(value="Snapmatic") Snapmatic
+              option(value="Ultra Leap") Ultra Leap
+              option(value="Visualise") Visualise
+              option(value="Volta") Volta
+              option(value="Vive HTC") Vive HTC
+              option(value="ZeeVee") ZeeVee
+              option(value="eyeora") eyeora
 
-        label(for="Previously_Visited_Flux__c") Have you visited Flux before? 
-          input(type='checkbox' name='Previously_Visited_Flux__c')
-      
+            label(for="Previously_Visited_Flux__c") Have you visited Flux before? 
+              input(type='checkbox' name='Previously_Visited_Flux__c')
+          
 
-        button(type="submit") Submit
+            button(type="submit") Submit
