@@ -7,6 +7,7 @@ import session from "express-session";
 import jsforce from "jsforce";
 import dotenv from "dotenv";
 import ip from "ip";
+import axios from "axios";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -21,6 +22,12 @@ app.use(express.static(`${__dirname}/public`));
 // Body parser middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+// MailChimp vars
+const mailchimp_apiKey = process.env.MAILCHIMP_API_KEY;
+const mailchimp_listId = process.env.MAILCHIMP_LIST_ID;
+const mailchimp_serverPrefix = process.env.MAILCHIMP_SERVER_PREFIX;
+
 
 // Connect to Salesforce
 app.use(
@@ -58,8 +65,8 @@ app.set("view engine", "pug");
 app.use("/", indexRouter);
 
 // Pass jsforce connection to middleware
-app.post("/submit", (req, res) => {
-  console.log(req.body);
+app.post("/submit", async (req, res) => {
+  // console.log(req.body);
 
   let name = req.body.FirstName;
   let surname = req.body.LastName;
@@ -79,34 +86,99 @@ app.post("/submit", (req, res) => {
     Previously_Visited_Flux__c: isVisited
   };
 
-  console.log("---------------- contact ----------------");
-  console.log(contact);
+  try {
+    // For Salesforce
+    const salesforceResult = await addSalesForceContact(contact);
+    console.log(`Salesforce result: ${salesforceResult.status}`);
 
-  conn.sobject("Contact").create(contact, function (err, ret) {
-    if (err || !ret.success) {
-      console.error(err, ret);
-      res.status(500).render("index", {
-        message: "Error reading submissions.",
-        showForm: false,
-      });
-    } else {
-      console.log("Saved submission:==========>", req.body);
+    // For MailChimp
+    const mailchimpResult = await addMailChimpContact(contact);
+    console.log(`MailChimp result: ${mailchimpResult.status}`);
+
+    // if both are true
+    if(mailchimpResult.status && salesforceResult.status) {
       res.render("index", {
         message: "Thank you for submitting.",
-        wifi_msg:`Please connect to our WIFI:`,
-        wifi_ssid:`SSID: Flux Guest`,
-        wifi_password:`Password: Welcome123`,
-        showForm: false,
+        wifi_msg: "Please connect to our WIFI:",
+        wifi_ssid: "SSID: Flux Guest",
+        wifi_password: "Password: Welcome123",
+        showForm: false
       });
-
-      //return res.redirect('/');
-      setTimeout(function () {
-        res.redirect("/");
-      }, 60000);
+    } else {
+      res.status(500).render("index", {
+        message: "Error processing your submission.",
+        showForm: true
+      });
     }
-  });
+
+  } catch (error) {
+    // console.error(error);
+    res.status(500).render("index", {
+      message: "Error processing your submission.",
+      showForm: true
+    });
+  }
 });
 
+// For MailChimp
+async function addMailChimpContact(contact) {
+  console.log("contact is", contact);
+  // console.log(`Adding contact to MailChimp - ${firstName}, ${LastName}, ${email}`);
+
+  const url = `https://${mailchimp_serverPrefix}.api.mailchimp.com/3.0/lists/${mailchimp_listId}/members`;
+
+  const contactDetails = {
+    email_address: contact.Email,
+    status: 'subscribed', // "subscribed" or "pending" if you want double opt-in
+    merge_fields: {
+      FNAME: contact.FirstName,
+      LNAME: contact.LastName,
+    }
+  };
+
+  const options = {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `apikey ${mailchimp_apiKey}`
+    }
+  };
+
+  console.log(contactDetails);
+
+  console.log(options);
+
+  console.log(url);
+
+  try{
+    const mailChimpSubmission = await axios.post(url, contactDetails, options);
+    console.log("MailChimp response:", mailChimpSubmission.status);
+    if(mailChimpSubmission.status === 200){
+      console.log(`Contact added: ${mailChimpSubmission.data.email_address}, Id is ${mailChimpSubmission.data.id}`);
+      return { status: true, message: 'Contact added', data: mailChimpSubmission.data };
+    } else { 
+      return { status: true, message: 'Contanct Exists or other error', data: mailChimpSubmission.data };
+    }
+
+  } catch (error) {
+    console.error('Error:', error.data);
+    return { status: false, message: 'Error adding contact', data: error };  
+  }
+}
+
+// For Salesforce
+async function addSalesForceContact(contact) {
+  return new Promise((resolve, reject) => {
+    conn.sobject("Contact").create(contact, function (err, ret) {
+      if (err || !ret.success) {
+        console.error(err, ret);
+        reject({ status: false, message: 'Error adding contact', data: err });
+      } else {
+        console.log("Saved submission:==========>", ret.id);
+        resolve({ status: true, message: 'Contact added', data: ret });
+      }
+    });
+  });
+}
 
 const port = process.env.PORT || 3000;
 
