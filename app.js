@@ -23,10 +23,11 @@ app.use(express.static(`${__dirname}/public`));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// mailchimp vars
-const _mailChimpAPI = process.env.MAILCHIMP_API_KEY;
-const listId = "20b218fecf";
-const serverPrefix = "us4";
+// MailChimp vars
+const mailchimp_apiKey = process.env.MAILCHIMP_API_KEY;
+const mailchimp_listId = process.env.MAILCHIMP_LIST_ID;
+const mailchimp_serverPrefix = process.env.MAILCHIMP_SERVER_PREFIX;
+
 
 // Connect to Salesforce
 app.use(
@@ -39,23 +40,23 @@ app.use(
   }),
 );
 
-// var conn = new jsforce.Connection({
-//   loginUrl: "https://login.salesforce.com",
-// });
+var conn = new jsforce.Connection({
+  loginUrl: "https://login.salesforce.com",
+});
 
-// conn.login(
-//   process.env.SALES_FORCE_USERNAME,
-//   process.env.SALES_FORCE_PASSWORD,
-//   function (err, userInfo) {
-//     if (err) {
-//       return console.error(err);
-//     }
-//     console.log(conn.accessToken);
-//     console.log(conn.instanceUrl);
-//     console.log("User ID: " + userInfo.id);
-//     console.log("Org ID: " + userInfo.organizationId);
-//   },
-// );
+conn.login(
+  process.env.SALES_FORCE_USERNAME,
+  process.env.SALES_FORCE_PASSWORD,
+  function (err, userInfo) {
+    if (err) {
+      return console.error(err);
+    }
+    console.log(conn.accessToken);
+    console.log(conn.instanceUrl);
+    console.log("User ID: " + userInfo.id);
+    console.log("Org ID: " + userInfo.organizationId);
+  },
+);
 
 // Set up pug as view engine
 app.set("view engine", "pug");
@@ -85,106 +86,99 @@ app.post("/submit", async (req, res) => {
     Previously_Visited_Flux__c: isVisited
   };
 
-  // save to mailchimp
-  let mailchimpStatus = await submitMailChimp(contact);
-  console.log('submission', mailchimpStatus);
+  try {
+    // For Salesforce
+    const salesforceResult = await addSalesForceContact(contact);
+    console.log(`Salesforce result: ${salesforceResult.status}`);
 
+    // For MailChimp
+    const mailchimpResult = await addMailChimpContact(contact);
+    console.log(`MailChimp result: ${mailchimpResult.status}`);
 
-    if(mailchimpStatus.status === false){
-      console.log("error saving to mailchimp");
-      res.status(500).render("index", {
-        message: "Error reading submissions." + mailchimpStatus.error.detail,
-        showForm: false,
-      });
-    } 
-
-    if(mailchimpStatus.status === true){
-      console.log("saved to mailchimp");
+    // if both are true
+    if(mailchimpResult.status && salesforceResult.status) {
       res.render("index", {
         message: "Thank you for submitting.",
-        wifi_msg:`Please connect to our WIFI:`,
-        wifi_ssid:`SSID: Flux Guest`,
-        wifi_password:`Password: Welcome123`,
-        showForm: false,
+        wifi_msg: "Please connect to our WIFI:",
+        wifi_ssid: "SSID: Flux Guest",
+        wifi_password: "Password: Welcome123",
+        showForm: false
+      });
+    } else {
+      res.status(500).render("index", {
+        message: "Error processing your submission.",
+        showForm: true
       });
     }
-  
-  // save to salesforce
-  // const salesForceStatus = await submitSalesForce(contact);
 
-  // return status to page
-  // if(mailchimpStatus){
-  //   console.log("saved to mailchimp and salesforce");
-  // }else{  
-  //   console.log("error saving to mailchimp and salesforce");
-  // }
-    
-  // console.log("---------------- contact ----------------");
-  // console.log(contact);
-  
-  // res.status(500).render("index", {
-  //   message: "Error reading submissions.",
-  //   showForm: false,
-  // });
-
-  // console.log("Saved submission:==========>", req.body);
-  // res.render("index", {
-  //   message: "Thank you for submitting.",
-  //   wifi_msg:`Please connect to our WIFI:`,
-  //   wifi_ssid:`SSID: Flux Guest`,
-  //   wifi_password:`Password: Welcome123`,
-  //   showForm: false,
-  // });
-
-
+  } catch (error) {
+    // console.error(error);
+    res.status(500).render("index", {
+      message: "Error processing your submission.",
+      showForm: true
+    });
+  }
 });
 
-// submit to mailchimp, write function to submits to mailchimp api
-const submitMailChimp = async (contact) =>{
-  
-  // Functions
-  const url = `https://${serverPrefix}.api.mailchimp.com/3.0/lists/${listId}/members`;
+// For MailChimp
+async function addMailChimpContact(contact) {
+  console.log("contact is", contact);
+  // console.log(`Adding contact to MailChimp - ${firstName}, ${LastName}, ${email}`);
+
+  const url = `https://${mailchimp_serverPrefix}.api.mailchimp.com/3.0/lists/${mailchimp_listId}/members`;
 
   const contactDetails = {
     email_address: contact.Email,
     status: 'subscribed', // "subscribed" or "pending" if you want double opt-in
     merge_fields: {
       FNAME: contact.FirstName,
-      LNAME: contact.LastName
+      LNAME: contact.LastName,
     }
   };
-  
+
   const options = {
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `apikey ${_mailChimpAPI}`
+      'Authorization': `apikey ${mailchimp_apiKey}`
     }
   };
-  
-  try {
-    let response = await axios.post(url, contactDetails, options);
-    console.log(`Contact added: ${response.data.email_address}, Id is ${response.data.id}`);
-    return {status: true, message: "Contact added to mailchimp", error: null};
-  } catch (error) {
-    console.error('Error adding contact:', error.response.data);
-    return {status: false, message: "Error adding contact to mailchimp", error: error.response.data };
-  }
 
+  console.log(contactDetails);
+
+  console.log(options);
+
+  console.log(url);
+
+  try{
+    const mailChimpSubmission = await axios.post(url, contactDetails, options);
+    console.log("MailChimp response:", mailChimpSubmission.status);
+    if(mailChimpSubmission.status === 200){
+      console.log(`Contact added: ${mailChimpSubmission.data.email_address}, Id is ${mailChimpSubmission.data.id}`);
+      return { status: true, message: 'Contact added', data: mailChimpSubmission.data };
+    } else { 
+      return { status: true, message: 'Contanct Exists or other error', data: mailChimpSubmission.data };
+    }
+
+  } catch (error) {
+    console.error('Error:', error.data);
+    return { status: false, message: 'Error adding contact', data: error };  
+  }
 }
 
-// submit to salesforce, write function to submits to salesforce api
-const submitSalesForce = async () =>{
-  conn.sobject("Contact").create(contact, function (err, ret) {
-    if (err || !ret.success) {
-      console.error(err, ret);
-      return false;
-    } else {
-      console.log("Created record id : " + ret.id);
-      return true;
-    }
+// For Salesforce
+async function addSalesForceContact(contact) {
+  return new Promise((resolve, reject) => {
+    conn.sobject("Contact").create(contact, function (err, ret) {
+      if (err || !ret.success) {
+        console.error(err, ret);
+        reject({ status: false, message: 'Error adding contact', data: err });
+      } else {
+        console.log("Saved submission:==========>", ret.id);
+        resolve({ status: true, message: 'Contact added', data: ret });
+      }
+    });
   });
 }
-
 
 const port = process.env.PORT || 3000;
 
