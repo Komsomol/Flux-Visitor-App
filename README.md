@@ -9,4 +9,4 @@ Using PM2 to start the app on server startup
 # Port control
 Find the process using port 3000:
 - `lsof -i :3000`
-- `kill <PID>`
+- `kill -9 <PID>`

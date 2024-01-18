@@ -122,9 +122,8 @@ app.post("/submit", async (req, res) => {
 
 // For MailChimp
 async function addMailChimpContact(contact) {
-  console.log("contact is", contact);
-  // console.log(`Adding contact to MailChimp - ${firstName}, ${LastName}, ${email}`);
-
+  console.log(`Adding to MailChimp`, contact);
+  
   const url = `https://${mailchimp_serverPrefix}.api.mailchimp.com/3.0/lists/${mailchimp_listId}/members`;
 
   const contactDetails = {
