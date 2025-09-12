@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/Komsomol/AlyaAI#readme",
   "devDependencies": {
-    "browser-sync": "^2.29.3",
+    "browser-sync": "^3.0.4",
     "eslint": "^8.45.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-import": "^2.27.5",
@@ -37,7 +37,7 @@
     "express-session": "^1.17.3",
     "ip": "^1.1.8",
     "jsforce": "^1.11.1",
-    "openai": "^3.3.0",
+    "openai": "^5.20.1",
     "pug": "^3.0.2"
   }
 }
